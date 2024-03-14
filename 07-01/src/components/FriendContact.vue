@@ -1,6 +1,7 @@
 <template>
   <li>
-    <h2>{{ name }} {{ friendIsFavorite ? '❤️' : '' }}</h2>
+    <!-- <h2>{{ name }} {{ friendIsFavorite ? '❤️' : '' }}</h2> -->
+    <h2>{{ name }} {{ isFavorite ? '❤️' : '' }}</h2>
     <button @click="toggleFavorite">Toggle Favorite</button>
     <button @click="toggleDetails">
       {{ detailsAreVisible ? 'Hide' : 'Show' }} Details
@@ -11,6 +12,7 @@
         <p>Email: {{ emailAddress }}</p>
       </li>
     </ul>
+    <button @click="$emit('delete', id)">Delete</button>
   </li>
 </template>
 
@@ -40,6 +42,17 @@ export default {
       default: false,
     },
   },
+  emits: ['toggle-favorite', 'delete'],
+  // emits: {
+  //   'toggle-favorite': function (id) {
+  //     if (id) {
+  //       return true;
+  //     } else {
+  //       console.warn('id is required');
+  //       return false;
+  //     }
+  //   },
+  // },
   data() {
     return {
       detailsAreVisible: false,
@@ -55,6 +68,9 @@ export default {
     // },
     toggleFavorite() {
       this.$emit('toggle-favorite', this.id); // communicate to parent
+    },
+    deleteFriend() {
+      this.$emit('delete', this.id);
     },
   },
 };
