@@ -1,24 +1,75 @@
 <template>
-  <BaseCard>
-    <form>
-      <div class="form-control">
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title" />
-      </div>
-      <div class="form-control">
-        <label for="description">Description</label>
-        <textarea name="description" id="description" rows="3"></textarea>
-      </div>
-      <div class="form-control">
-        <label for="link">Link</label>
-        <input type="url" name="link" id="link" />
-      </div>
-      <div>
-        <BaseButton type="submit">Add Resource</BaseButton>
-      </div>
-    </form>
-  </BaseCard>
+  <div>
+    <BaseDialog
+      v-if="inputIsInvalid"
+      title="Invalid Input"
+      @close="confirmError"
+    >
+      <template #default>
+        <p>Unfortunately, at least one input value is invalid.</p>
+        <p>Please make sure to fill out all fields.</p>
+      </template>
+      <template #actions>
+        <BaseButton @click="confirmError">Okay</BaseButton>
+      </template>
+    </BaseDialog>
+    <BaseCard>
+      <form @submit.prevent="submitData">
+        <div class="form-control">
+          <label for="title">Title</label>
+          <input type="text" name="title" id="title" ref="titleInput" />
+        </div>
+        <div class="form-control">
+          <label for="description">Description</label>
+          <textarea
+            name="description"
+            id="description"
+            rows="3"
+            ref="descInput"
+          ></textarea>
+        </div>
+        <div class="form-control">
+          <label for="link">Link</label>
+          <input type="url" name="link" id="link" ref="linkInput" />
+        </div>
+        <div>
+          <BaseButton type="submit">Add Resource</BaseButton>
+        </div>
+      </form>
+    </BaseCard>
+  </div>
 </template>
+
+<script>
+export default {
+  inject: ['addResource'],
+  data() {
+    return {
+      inputIsInvalid: false,
+    };
+  },
+  methods: {
+    submitData() {
+      const enteredTitle = this.$refs.titleInput.value;
+      const enteredDescription = this.$refs.descInput.value;
+      const enteredLink = this.$refs.linkInput.value;
+
+      if (
+        enteredTitle.trim() === '' ||
+        enteredDescription.trim() === '' ||
+        enteredLink.trim() === ''
+      ) {
+        this.inputIsInvalid = true;
+        return;
+      }
+      this.addResource(enteredTitle, enteredDescription, enteredLink);
+    },
+    confirmError() {
+      this.inputIsInvalid = false;
+    },
+  },
+};
+</script>
 
 <style scoped>
 label {
