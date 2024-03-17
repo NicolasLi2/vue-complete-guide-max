@@ -26,17 +26,44 @@ const router = createRouter({
         }, // Pass route params as props makes it more reusable
       ],
     },
-    { path: '/users', components: { default: UsersList, footer: UsersFooter } },
+    {
+      path: '/users',
+      components: { default: UsersList, footer: UsersFooter },
+      beforeEnter(to, from, next) {
+        console.log('users beforeEnter');
+        console.log(to, from);
+        next();
+      },
+    },
     { path: '/:notFound(.*)', component: NotFound },
   ],
   // linkActiveClass: 'active', // Set css class 'router-link-active' to 'active'
-  scrollBehavior(to, from, savedPosition) {
-    console.log(to, from, savedPosition);
+  scrollBehavior(_, _2, savedPosition) {
+    // console.log(to, from, savedPosition);
     if (savedPosition) {
       return savedPosition;
     }
     return { left: 0, top: 0 };
   },
+});
+
+// Navigation guard
+router.beforeEach((to, from, next) => {
+  console.log('Global beforeEach');
+  console.log(to, from);
+  // next(false); // Prevent navigation
+  // if (to.name === 'team-members') {
+  //   next();
+  // } else {
+  //   next({ name: 'team-members', params: { teamId: 't2' } });
+  // }
+  next();
+});
+
+router.afterEach((to, from) => {
+  // Sending analytics data
+  console.log('Global afterEach');
+  console.log(to, from);
 });
 
 const app = createApp(App);
