@@ -12,10 +12,16 @@ const router = createRouter({
   routes: [
     { path: '/', redirect: '/teams' },
     {
+      name: 'teams',
       path: '/teams',
       component: TeamsList,
       children: [
-        { path: ':teamId', component: TeamMembers, props: true }, // Pass route params as props makes it more reusable
+        {
+          name: 'team-members',
+          path: ':teamId',
+          component: TeamMembers,
+          props: true,
+        }, // Pass route params as props makes it more reusable
       ],
     },
     { path: '/users', component: UsersList },
