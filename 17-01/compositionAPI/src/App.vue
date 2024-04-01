@@ -1,31 +1,36 @@
 <template>
   <section class="container">
-    <!-- <h2>{{ userName }}</h2> -->
-    <!-- <h3>{{ age }}</h3> -->
+    <h2>{{ userName }}</h2>
+    <h3>{{ age }}</h3>
     <p>{{ user.name }}</p>
     <p>{{ user.age }}</p>
   </section>
 </template>
 
 <script>
+import { ref, isReactive, isRef, toRefs } from 'vue';
 import { reactive } from 'vue';
 
 export default {
   setup() {
+    const uAge = ref(27);
     const user = reactive({
       // reactive is only for objects
       name: 'Maximilian',
       age: 27,
     });
 
-    console.log(user);
+    console.log(isReactive(user));
+    console.log(isRef(uAge));
 
     setTimeout(() => {
       user.name = 'Max';
       user.age = 28;
     }, 2000);
 
-    return { user: user };
+    const userRefs = toRefs(user);
+
+    return { user: user, userName: userRefs.name, age: userRefs.age };
   },
 };
 </script>
