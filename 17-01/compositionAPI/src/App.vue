@@ -8,13 +8,12 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { reactive } from 'vue';
 
 export default {
   setup() {
-    // const uName = ref('Maximilian');
-    // const uAge = ref(27);
-    const user = ref({
+    const user = reactive({
+      // reactive is only for objects
       name: 'Maximilian',
       age: 27,
     });
@@ -22,20 +21,12 @@ export default {
     console.log(user);
 
     setTimeout(() => {
-      // uName.value = 'Max';
-      // uAge.value = 28;
-      user.value.name = 'Max';
-      user.value.age = 28;
+      user.name = 'Max';
+      user.age = 28;
     }, 2000);
 
-    // return { userName: uName, age: uAge };
     return { user: user };
   },
-  // data() {
-  //   return {
-  //     userName: 'Maximilian',
-  //   };
-  // },
 };
 </script>
 
